@@ -19,6 +19,8 @@ parser.add_argument('-sl', '--seasonlength', action='store_const', const=True, r
 					help='Set length of season number representation. Ex: "2"=>"S01", "3" => "S001". [Default is 2]')
 parser.add_argument('-el', '--episodelength', action='store_const', const=True, required=False, default=2,
 					help='Set length of episode number representation. Ex: "2"=>"E01", "3" => "E001". [Default is 2]')
+parser.add_argument('-rs', '--renamesubdir', action='store_const', const=True, required=False, default=True,
+					help='Enables the renaming of show subfolders.')
 parser.add_argument('-v', '--version', action='version', version='%(prog)s '+__VERSION__)
 
 # Parsing argument values into the 'args' namespace object.
@@ -27,7 +29,8 @@ args = parser.parse_args()
 def autoRename(dir):
 	s_rg = re.compile('[0-9]{1,2}')
 	ext_rg = re.compile('\..+')
-	list = {}
+	files_list = {}
+	subdir_list = {}
 	for top_dirname, top_dirnames, top_filenames in os.walk(dir):
 		if top_dirname == dir:
 			continue
@@ -35,23 +38,29 @@ def autoRename(dir):
 		m = s_rg.search(season)
 		if m:
 			season_num = str(m.group()).zfill(args.seasonlength)
-			list[season_num] = {}
+			files_list[season_num] = {}
 			num = 1
 			for filename in top_filenames:
 				show_title = (args.showtitle if args.showtitle is not False else dir).replace(' ','.')
 				ep_str = str("{0:0"+str(args.episodelength)+"d}").format(num)
 				ext = ext_rg.search(filename).group()
 				new_name = show_title+"."+"S"+season_num+"E"+ep_str+ext
-				list[season_num][filename] = new_name
+				files_list[season_num][filename] = new_name
 				os.rename(top_dirname+"/"+filename,top_dirname+"/"+new_name)
 				num+=1
+			if args.renamesubdir:
+				new_dirname = "Season "+season_num+"/"
+				subdir_list[top_dirname] = new_dirname
+				os.rename(top_dirname,new_dirname)
 
 	print "All done renaming!"
 	print "Here's the renaming map ..."
-	print list
-	print "Saving directory map ..."
+	print files_list
+	print "Saving file map ..."
 	fh = open(args.directory+'.map','wb')
-	cPickle.dump(list,fh)
+	cPickle.dump(files_list,fh)
+	if args.renamesubdir:
+		cPickle.dump(subdir_list,fh)
 	fh.close()
 	print "Saved as "+args.directory+'.map'+"!"
 	return True
