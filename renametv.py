@@ -3,7 +3,7 @@ __VERSION__ = '0.1'
 import os				# For running system commands.
 import argparse			# For argument parsing.
 import re				# For regular expressions
-import pickle			# For storing directory mappings
+import cPickle			# For storing directory mappings
 
 #TODO: Save a json file of the filenames, what they started as and ended as. Implement a "reversal" function that'll return files to their original names.
 
@@ -51,7 +51,7 @@ def autoRename(dir):
 	print list
 	print "Saving directory map ..."
 	fh = open(args.directory+'.map','wb')
-	pickle.dump(list,fh)
+	cPickle.dump(list,fh)
 	fh.close()
 	print "Saved as "+args.directory+'.map'+"!"
 	return True
