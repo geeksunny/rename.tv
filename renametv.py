@@ -13,6 +13,8 @@ parser.add_argument('directory', metavar='DIRECTORY', type=str,
 					help='Directory of the selected TV show.')
 parser.add_argument('-a', '--auto', action='store_const', const=True, required=False, default=False,
 					help='Automatically generate filenames based on file order.')
+parser.add_argument('-st', '--showtitle', action='store_const', const=True, required=False, default=False,
+					help='The title of your TV show, if it differs from the directory\'s name.')
 parser.add_argument('-sl', '--seasonlength', action='store_const', const=True, required=False, default=2,
 					help='Set length of season number representation. Ex: "2"=>"S01", "3" => "S001". [Default is 2]')
 parser.add_argument('-el', '--episodelength', action='store_const', const=True, required=False, default=2,
@@ -36,9 +38,10 @@ def autoRename(dir):
 			list[season_num] = {}
 			num = 1
 			for filename in top_filenames:
+				show_title = (args.showtitle if args.showtitle is not False else dir).replace(' ','.')
 				ep_str = str("{0:0"+str(args.episodelength)+"d}").format(num)
 				ext = ext_rg.search(filename).group()
-				new_name = "S"+season_num+"E"+ep_str+ext
+				new_name = show_title+"."+"S"+season_num+"E"+ep_str+ext
 				list[season_num][filename] = new_name
 				os.rename(top_dirname+"/"+filename,top_dirname+"/"+new_name)
 				num+=1
