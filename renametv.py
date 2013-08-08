@@ -13,6 +13,8 @@ parser.add_argument('directory', metavar='DIRECTORY', type=str,
 					help='Directory of the selected TV show.')
 parser.add_argument('-a', '--auto', action='store_const', const=True, required=False, default=False,
 					help='Automatically generate filenames based on file order.')
+parser.add_argument('-r', '--restore', action='store_const', const=True, required=False, default=False,
+					help='Restore a directory based on the existing saved file map.')
 parser.add_argument('-st', '--showtitle', action='store_const', const=True, required=False, default=False,
 					help='The title of your TV show, if it differs from the directory\'s name.')
 parser.add_argument('-sl', '--seasonlength', action='store_const', const=True, required=False, default=2,
@@ -26,6 +28,32 @@ parser.add_argument('-v', '--version', action='version', version='%(prog)s '+__V
 # Parsing argument values into the 'args' namespace object.
 args = parser.parse_args()
 
+###
+# Auto Restore Function
+def autoRestore(dir):
+	if os.path.isfile(dir+".map"):
+		# Read mapping file in to memory.
+		fh = open(dir+".map","r")
+		files_list = cPickle.load(fh)
+		try:
+			subdir_list = cPickle.load(fh)
+		except EOFError:
+			subdir_list = False
+		fh.close()
+		# Revert directory renames, if data present.
+		if subdir_list:
+			for old_dir, new_dir in subdir_list.iteritems():
+				os.rename(new_dir,old_dir)
+		for dirname, file_list in files_list.iteritems():
+			for old_filename, new_filename in file_list.iteritems():
+				os.rename(dirname+"/"+new_filename,dirname+"/"+old_filename)
+		# Finished!
+		print "Job's finished!"
+	else:
+		print "A mapping file for "+dir+" does not exist! No changes taking place."
+
+###
+# Auto Rename Function
 def autoRename(dir):
 	s_rg = re.compile('[0-9]{1,2}')
 	ext_rg = re.compile('\..+')
@@ -70,5 +98,7 @@ tree = list()
 # -a flag "required" right now, until an alternative method is developed.
 if args.auto:
 	autoRename(args.directory)
+elif args.restore:
+	autoRestore(args.directory)
 else:
 	print "Not yet."
