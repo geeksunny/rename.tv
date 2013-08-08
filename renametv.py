@@ -38,20 +38,20 @@ def autoRename(dir):
 		m = s_rg.search(season)
 		if m:
 			season_num = str(m.group()).zfill(args.seasonlength)
-			files_list[season_num] = {}
+			files_list[top_dirname] = {}
 			num = 1
 			for filename in top_filenames:
 				show_title = (args.showtitle if args.showtitle is not False else dir).replace(' ','.')
 				ep_str = str("{0:0"+str(args.episodelength)+"d}").format(num)
 				ext = ext_rg.search(filename).group()
 				new_name = show_title+"."+"S"+season_num+"E"+ep_str+ext
-				files_list[season_num][filename] = new_name
+				files_list[top_dirname][filename] = new_name
 				os.rename(top_dirname+"/"+filename,top_dirname+"/"+new_name)
 				num+=1
 			if args.renamesubdir:
 				new_dirname = "Season "+season_num+"/"
-				subdir_list[top_dirname] = new_dirname
-				os.rename(top_dirname,new_dirname)
+				subdir_list[top_dirname] = dir+"/"+new_dirname
+				os.rename(top_dirname,dir+"/"+new_dirname)
 
 	print "All done renaming!"
 	print "Here's the renaming map ..."
