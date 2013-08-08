@@ -5,7 +5,6 @@ import argparse			# For argument parsing.
 import re				# For regular expressions
 import cPickle			# For storing directory mappings
 
-#TODO: Save a json file of the filenames, what they started as and ended as. Implement a "reversal" function that'll return files to their original names.
 
 ### Parsing command arguments
 parser = argparse.ArgumentParser(description='Sync your development code trees.')
