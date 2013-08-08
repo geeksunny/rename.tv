@@ -15,11 +15,11 @@ parser.add_argument('-a', '--auto', action='store_const', const=True, required=F
 					help='Automatically generate filenames based on file order.')
 parser.add_argument('-r', '--restore', action='store_const', const=True, required=False, default=False,
 					help='Restore a directory based on the existing saved file map.')
-parser.add_argument('-st', '--showtitle', action='store_const', const=True, required=False, default=False,
+parser.add_argument('-st', '--showtitle', required=False, default=False, type=str, nargs=1,
 					help='The title of your TV show, if it differs from the directory\'s name.')
-parser.add_argument('-sl', '--seasonlength', action='store_const', const=True, required=False, default=2,
+parser.add_argument('-sl', '--seasonlength', required=False, default=2, type=int, nargs=1,
 					help='Set length of season number representation. Ex: "2"=>"S01", "3" => "S001". [Default is 2]')
-parser.add_argument('-el', '--episodelength', action='store_const', const=True, required=False, default=2,
+parser.add_argument('-el', '--episodelength', required=False, default=2, type=int, nargs=1,
 					help='Set length of episode number representation. Ex: "2"=>"E01", "3" => "E001". [Default is 2]')
 parser.add_argument('-rs', '--renamesubdir', action='store_const', const=True, required=False, default=True,
 					help='Enables the renaming of show subfolders.')
