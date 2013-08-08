@@ -11,17 +11,17 @@ import cPickle			# For storing directory mappings
 parser = argparse.ArgumentParser(description='Sync your development code trees.')
 parser.add_argument('directory', metavar='DIRECTORY', type=str,
 					help='Directory of the selected TV show.')
-parser.add_argument('-a', '--auto', action='store_const', const=True, required=False, default=False,
+parser.add_argument('-a', dest='auto', action='store_const', const=True, required=False, default=False,
 					help='Automatically generate filenames based on file order.')
-parser.add_argument('-r', '--restore', action='store_const', const=True, required=False, default=False,
+parser.add_argument('-r', dest='restore', action='store_const', const=True, required=False, default=False,
 					help='Restore a directory based on the existing saved file map.')
-parser.add_argument('-st', '--showtitle', required=False, default=False, type=str, nargs=1,
+parser.add_argument('-st', dest='showtitle', metavar='TITLE', required=False, default=False, type=str, nargs=1,
 					help='The title of your TV show, if it differs from the directory\'s name.')
-parser.add_argument('-sl', '--seasonlength', required=False, default=2, type=int, nargs=1,
+parser.add_argument('-sl', dest='seasonlength', metavar='#', required=False, default=2, type=int, nargs=1,
 					help='Set length of season number representation. Ex: "2"=>"S01", "3" => "S001". [Default is 2]')
-parser.add_argument('-el', '--episodelength', required=False, default=2, type=int, nargs=1,
+parser.add_argument('-el', dest='episodelength', metavar='#', required=False, default=2, type=int, nargs=1,
 					help='Set length of episode number representation. Ex: "2"=>"E01", "3" => "E001". [Default is 2]')
-parser.add_argument('-rs', '--renamesubdir', action='store_const', const=True, required=False, default=True,
+parser.add_argument('-rs', dest='renamesubdir', action='store_const', const=True, required=False, default=True,
 					help='Enables the renaming of show subfolders.')
 parser.add_argument('-v', '--version', action='version', version='%(prog)s '+__VERSION__)
 
