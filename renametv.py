@@ -55,7 +55,7 @@ def autoRestore(dir):
 # Auto Rename Function
 def autoRename(dir):
 	s_rg = re.compile('[0-9]{1,2}')
-	ext_rg = re.compile('\..+')
+	ext_rg = re.compile('^.+(\..*)$')
 	files_list = {}
 	subdir_list = {}
 	for top_dirname, top_dirnames, top_filenames in os.walk(dir):
@@ -70,7 +70,7 @@ def autoRename(dir):
 			for filename in top_filenames:
 				show_title = (args.showtitle if args.showtitle is not False else dir).replace(' ','.')
 				ep_str = str("{0:0"+str(args.episodelength)+"d}").format(num)
-				ext = ext_rg.search(filename).group()
+				ext = ext_rg.search(filename).group(1)
 				new_name = show_title+"."+"S"+season_num+"E"+ep_str+ext
 				files_list[top_dirname][filename] = new_name
 				os.rename(top_dirname+"/"+filename,top_dirname+"/"+new_name)
