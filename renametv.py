@@ -68,7 +68,7 @@ def autoRename(dir):
 			files_list[top_dirname] = {}
 			num = 1
 			for filename in top_filenames:
-				show_title = (args.showtitle if args.showtitle is not False else dir).replace(' ','.')
+				show_title = (args.showtitle[0] if args.showtitle is not False else dir).replace(' ','.')
 				ep_str = str("{0:0"+str(args.episodelength)+"d}").format(num)
 				ext = ext_rg.search(filename).group(1)
 				new_name = show_title+"."+"S"+season_num+"E"+ep_str+ext
